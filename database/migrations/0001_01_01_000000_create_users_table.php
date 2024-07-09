@@ -22,7 +22,10 @@ return new class extends Migration
             $table->string('address');
             $table->string('website')->default('');
             $table->string('linkedin_profile')->nullable();
+            $table->string('company_linkedin')->nullable();
             $table->string('facebook')->nullable();
+            $table->string('feedback')->nullable();
+            $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();
             $table->string('phone');
             // $table->string('image')->nullable();
