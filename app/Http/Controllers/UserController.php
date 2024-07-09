@@ -68,7 +68,12 @@ class UserController extends Controller
             $imgUser->user_id = $user->id;
             $imgUser->save();
             $user->save();
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+            // updated
+            if($user){
+                return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+            } else {
+                return response()->json(['message' => 'Failed to create the user'], 500);
+            }
 
 }
 public function update(Request $request, $userId)
