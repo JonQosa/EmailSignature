@@ -61,8 +61,8 @@ class UserController extends Controller
                 $imgUser->company_logo2 = $companyLogo2Path;
             }
             if ($request->hasFile('gif')) {
-                $gifPath = $request->file('company_logo3')->store('images', 'public');
-                $imgUser->company_logo3 = $gifPath;
+                $gifPath = $request->file('gif')->store('images', 'public');
+                $imgUser->gif = $gifPath;
             }
 
             $imgUser->user_id = $user->id;

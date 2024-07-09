@@ -9,7 +9,9 @@ use App\Http\Controllers\ImageController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::post('users', [UserController::class, 'store']);Route::put('users/{id}', [UserController::class, 'update']);
+
+Route::post('users', [UserController::class, 'store']);
+Route::put('users/{id}', [UserController::class, 'update']);
 Route::put('users/{id}', [UserController::class, 'update']);
 Route::delete('users/{id}', [UserController::class, 'destroy']);
 Route::post('users/{userId}/images', [ImageController::class, 'store']);
