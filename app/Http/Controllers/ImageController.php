@@ -17,7 +17,7 @@ class ImageController extends Controller
             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'company_logo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
