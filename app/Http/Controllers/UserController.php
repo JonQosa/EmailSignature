@@ -81,6 +81,7 @@ class UserController extends Controller
 }
 public function update(Request $request, $userId)
 {
+
     try {
         // Validate incoming request data
         $validatedData = $request->validate([
@@ -119,26 +120,26 @@ public function update(Request $request, $userId)
 
             // Store new image
             $imagePath = $request->file('image')->store('images', 'public');
-            $imgUser->image = $imagePath;
+            $imgUser->image = basename($imagePath);
         }
 
         // Handle company logos update
         // dd($request->company_logo);
         if ($request->hasFile('company_logo')) {
             $companyLogoPath = $request->file('company_logo')->store('images', 'public');
-            $imgUser->company_logo = $companyLogoPath;
+            $imgUser->company_logo = basename($companyLogoPath);
         }
         if ($request->hasFile('company_logo1')) {
             $companyLogo1Path = $request->file('company_logo1')->store('images', 'public');
-            $imgUser->company_logo1 = $companyLogo1Path;
+            $imgUser->company_logo1 = basename($companyLogo1Path);
         }
         if ($request->hasFile('company_logo2')) {
             $companyLogo2Path = $request->file('company_logo2')->store('images', 'public');
-            $imgUser->company_logo2 = $companyLogo2Path;
+            $imgUser->company_logo2 = basename($companyLogo2Path);
         }
         if ($request->hasFile('gif')) {
             $gifPath = $request->file('company_logo3')->store('images', 'public');
-            $imgUser->company_logo3 = $gifPath;
+            $imgUser->company_logo3 = basename($gifPath);
         }
 
         $user = User::findOrFail($userId);
