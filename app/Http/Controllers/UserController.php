@@ -107,7 +107,7 @@ public function update(Request $request, $userId)
             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'company_logo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $imgUser = Image::where('user_id', $userId)->first();
@@ -139,7 +139,7 @@ public function update(Request $request, $userId)
         }
         if ($request->hasFile('gif')) {
             $gifPath = $request->file('company_logo3')->store('images', 'public');
-            $imgUser->company_logo3 = basename($gifPath);
+            $imgUser->gif = basename($gifPath);
         }
 
         $user = User::findOrFail($userId);
