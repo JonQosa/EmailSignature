@@ -162,17 +162,13 @@ public function update(Request $request, $userId)
 public function destroy($userId)
 {
     try {
-        // Find the user by ID
         $user = User::findOrFail($userId);
 
-        // Delete the user
         $user->delete();
 
-        // Return success response
         return response()->json(['message' => 'User deleted successfully'], 200);
 
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        // Handle case where user with given ID is not found
         return response()->json(['error' => 'User not found'], 404);
     } catch (\Exception $e) {
         // Handle other exceptions
