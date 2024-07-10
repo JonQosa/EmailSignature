@@ -149,8 +149,8 @@ public function update(Request $request, $userId)
 
 
         // Update user attributes based on validated data
-        $user->fill($validatedData);
-        $user->save();
+        $user->update($validatedData);
+        
 
         // Return success response
     return response()->json(['message' => 'User updated successfully', 'user' => $user]);
