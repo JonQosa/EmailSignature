@@ -48,24 +48,24 @@ class UserController extends Controller
                 // Delete old image if exists
 
                 $imagePath = $request->file('image')->store('images', 'public');
-                $imgUser->image = $imagePath;
+                $imgUser->image = basename($imagePath);
             }
 
             if ($request->hasFile('company_logo')) {
                 $companyLogoPath = $request->file('company_logo')->store('images', 'public');
-                $imgUser->company_logo = $companyLogoPath;
+                $imgUser->company_logo = basename($companyLogoPath);
             }
             if ($request->hasFile('company_logo1')) {
                 $companyLogo1Path = $request->file('company_logo1')->store('images', 'public');
-                $imgUser->company_logo1 = $companyLogo1Path;
+                $imgUser->company_logo1 = basename($companyLogo1Path);
             }
             if ($request->hasFile('company_logo2')) {
                 $companyLogo2Path = $request->file('company_logo2')->store('images', 'public');
-                $imgUser->company_logo2 = $companyLogo2Path;
+                $imgUser->company_logo2 = basename($companyLogo2Path);
             }
             if ($request->hasFile('gif')) {
                 $gifPath = $request->file('gif')->store('images', 'public');
-                $imgUser->gif = $gifPath;
+                $imgUser->gif = basename($gifPath);
             }
 
             $imgUser->user_id = $user->id;
