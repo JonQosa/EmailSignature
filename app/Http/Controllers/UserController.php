@@ -125,7 +125,6 @@ public function update(Request $request, $userId)
             $imgUser->image = basename($imagePath);
         }
 
-        // Handle company logos update
         // dd($request->company_logo);
         if ($request->hasFile('company_logo')) {
             $companyLogoPath = $request->file('company_logo')->store('images', 'public');
@@ -149,17 +148,13 @@ public function update(Request $request, $userId)
         $imgUser->user_id = $user->id;
         $imgUser->save();
 
-        // Update user attributes based on validated data
         $user->update($validatedData);
         // dd($validatedData);
-        // Return success response
     return response()->json(['message' => 'User updated successfully', 'user' => $user->refresh()]);
 
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        // Handle case where user with given ID is not found
         return response()->json(['error' => 'User not found'], 404);
     } catch (\Exception $e) {
-        // Handle other exceptions
         return response()->json(['error' => 'Failed to update user', 'message' => $e->getMessage()], 500);
     }
 }
