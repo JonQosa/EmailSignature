@@ -110,6 +110,8 @@ public function update(Request $request, $userId)
             'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+
+
         $imgUser = Image::where('user_id', $userId)->first();
 
 
@@ -143,17 +145,15 @@ public function update(Request $request, $userId)
         }
 
         $user = User::findOrFail($userId);
-
+        // dd($user);
         $imgUser->user_id = $user->id;
         $imgUser->save();
 
-
         // Update user attributes based on validated data
         $user->update($validatedData);
-        
-
+        // dd($validatedData);
         // Return success response
-    return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+    return response()->json(['message' => 'User updated successfully', 'user' => $user->refresh()]);
 
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
         // Handle case where user with given ID is not found
