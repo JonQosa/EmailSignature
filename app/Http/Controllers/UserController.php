@@ -82,17 +82,14 @@ class UserController extends Controller
 
 public function show($userId){
     try {
-        // Attempt to retrieve the user from database
         $user = User::findOrFail($userId);
         
-        // Return the user as JSON response
         return response()->json($user);
-        
+        // not found
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        // Handle the case where user is not found
         return response()->json([
             'message' => 'User not found.'
-        ], 404); // HTTP 404 Not Found status code
+        ], 404); 
     }
 
 }
