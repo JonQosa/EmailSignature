@@ -11,7 +11,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         
-            // Validate incoming request data
             $validatedDataUser = $request->validate([
                 'name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
@@ -83,7 +82,6 @@ public function update(Request $request, $userId)
 {
 
     try {
-        // Validate incoming request data
         $validatedData = $request->validate([
             'name' => 'string|max:255',
             'last_name' => 'string|max:255',
