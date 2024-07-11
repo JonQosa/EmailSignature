@@ -139,7 +139,7 @@ public function update(Request $request, $userId)
             $imgUser->company_logo2 = basename($companyLogo2Path);
         }
         if ($request->hasFile('gif')) {
-            $gifPath = $request->file('company_logo3')->store('images', 'public');
+            $gifPath = $request->file('gif')->store('images', 'public');
             $imgUser->gif = basename($gifPath);
         }
 
