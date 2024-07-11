@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Image;
+
 class UserController extends Controller
 {
     public function store(Request $request)
@@ -78,6 +79,24 @@ class UserController extends Controller
             }
 
 }
+
+public function show($userId){
+    try {
+        // Attempt to retrieve the user from database
+        $user = User::findOrFail($userId);
+        
+        // Return the user as JSON response
+        return response()->json($user);
+        
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        // Handle the case where user is not found
+        return response()->json([
+            'message' => 'User not found.'
+        ], 404); // HTTP 404 Not Found status code
+    }
+
+}
+
 public function update(Request $request, $userId)
 {
 
