@@ -98,6 +98,9 @@ public function update(Request $request, $userId)
 {
 
     try {
+
+        $user = User::findOrFail($userId);
+
         $validatedData = $request->validate([
             'name' => 'string|max:255',
             'last_name' => 'string|max:255',
@@ -124,7 +127,13 @@ public function update(Request $request, $userId)
             'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        if ($request->has('email') && $request->email !== $user->email) {
+            $request->validate([
+                'email' => 'unique:users,email', 
+            ]);
+        }
 
+        
 
         $imgUser = Image::where('user_id', $userId)->first();
 
@@ -134,7 +143,7 @@ public function update(Request $request, $userId)
                 Storage::delete('public/' . $imgUser->image);
             }
 
-            // Store new image
+            //  new image
             $imagePath = $request->file('image')->store('images', 'public');
             $imgUser->image = basename($imagePath);
         }
@@ -156,7 +165,7 @@ public function update(Request $request, $userId)
             $gifPath = $request->file('gif')->store('images', 'public');
             $imgUser->gif = basename($gifPath);
         }
-
+        
         $user = User::findOrFail($userId);
         // dd($user);
         $imgUser->user_id = $user->id;
