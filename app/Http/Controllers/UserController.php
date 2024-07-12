@@ -79,16 +79,29 @@ class UserController extends Controller
             }
 
 }
+public function index()
+{
+   
+    $user = User::with('image')->get();
+
+    return response()->json($user);
+}
 
 public function show($userId){
     try {
+        // Find the user by ID
         $user = User::findOrFail($userId);
-        
-        return response()->json($user);
-        // not found
+
+        $imgUser = Image::where('user_id', $userId)->get();
+
+        return response()->json([
+            'user' => $user,
+            'image' => $imgUser,
+        ]);
+
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
         return response()->json([
-            'message' => 'User not found.'
+            'error' => 'User not found.'
         ], 404); 
     }
 
@@ -98,7 +111,7 @@ public function update(Request $request, $userId)
 {
 
     try {
-
+        
         $user = User::findOrFail($userId);
 
         $validatedData = $request->validate([

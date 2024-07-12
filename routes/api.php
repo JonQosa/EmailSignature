@@ -10,8 +10,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
+Route::get('/get-users', [UserController::class, 'index']);
 Route::get('users/{id}', [UserController::class, 'show']);
-Route::post('users', [UserController::class, 'store']);
+Route::post('save-user', [UserController::class, 'store']);
 Route::put('users/{id}', [UserController::class, 'update']);
 Route::put('users/{id}', [UserController::class, 'update']);
 Route::delete('users/{id}', [UserController::class, 'destroy']);

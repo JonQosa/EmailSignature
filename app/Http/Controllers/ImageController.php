@@ -17,7 +17,7 @@ class ImageController extends Controller
             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'company_logo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -45,7 +45,7 @@ class ImageController extends Controller
             }
             if ($request->hasFile('gif')) {
                 $gifPath = $request->file('gif')->store('images', 'public');
-                $user->company_logo3 = $gifPath;
+                $user->gifPath = $gifPath;
             }
 
             // Save the user record
@@ -107,8 +107,8 @@ class ImageController extends Controller
                 $user->company_logo2 = $companyLogo2Path;
             }
             if ($request->hasFile('gif')) {
-                $companyLogo3Path = $request->file('gif')->store('images', 'public');
-                $user->gif = $companyLogo3Path;
+                $gifPath = $request->file('gif')->store('images', 'public');
+                $user->gif = $gifPath;
             }
 
             // Save the user record
