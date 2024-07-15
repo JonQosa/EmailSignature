@@ -14,7 +14,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/get-users', [UserController::class, 'index']);
 Route::get('users/{id}', [UserController::class, 'show']);
 Route::post('save-user', [UserController::class, 'store']);
-Route::put('users/{id}', [UserController::class, 'update']);
+Route::put('update-user/{id}', [UserController::class, 'update']);
 Route::put('users/{id}', [UserController::class, 'update']);
 Route::delete('users/{id}', [UserController::class, 'destroy']);
 Route::post('users/{userId}/images', [ImageController::class, 'store']);
