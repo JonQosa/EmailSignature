@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ImageUser; // Make sure to import your ImageUser model
 use App\Models\Image;
 
 class ImageUploadController extends Controller

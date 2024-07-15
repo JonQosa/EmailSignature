@@ -24,13 +24,13 @@ class ImageController extends Controller
             // Find the user by ID
             $user = User::findOrFail($userId);
 
-            // Handle main image upload
+            //  main image upload
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('images', 'public');
                 $user->image = $imagePath;
             }
 
-            // Handle company logos upload
+            //  company logos upload
             if ($request->hasFile('company_logo')) {
                 $companyLogoPath = $request->file('company_logo')->store('images', 'public');
                 $user->company_logo = $companyLogoPath;
@@ -48,10 +48,9 @@ class ImageController extends Controller
                 $user->gifPath = $gifPath;
             }
 
-            // Save the user record
             $user->save();
+            
 
-            // Log success message
             Log::info('Images uploaded successfully for user: ' . $user->id);
 
             return response()->json(['message' => 'Images uploaded successfully', 'user' => $user], 201);
@@ -93,7 +92,7 @@ class ImageController extends Controller
                 $user->image = $imagePath;
             }
 
-            // Handle company logos update
+            //  company logos update
             if ($request->hasFile('company_logo')) {
                 $companyLogoPath = $request->file('company_logo')->store('images', 'public');
                 $user->company_logo = $companyLogoPath;
@@ -114,7 +113,6 @@ class ImageController extends Controller
             // Save the user record
             $user->save();
 
-            // Log success message
             Log::info('Images updated successfully for user: ' . $user->id);
 
             return response()->json(['message' => 'Images updated successfully', 'user' => $user], 200);
@@ -129,10 +127,10 @@ class ImageController extends Controller
     public function destroy($userId)
     {
         try {
-            // Find the user by ID
+
             $user = User::findOrFail($userId);
 
-            // Delete user's images (if they exist)
+            // Delete users image if they exist
             if ($user->image) {
                 Storage::delete('public/' . $user->image);
                 $user->image = null;
@@ -154,11 +152,10 @@ class ImageController extends Controller
                 $user->gif = null;
             }
 
-            // Save the user record
             $user->save();
 
             
-            // Return 
+             
             return response()->json(['message' => 'Images deleted successfully'], 200);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

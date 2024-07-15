@@ -140,6 +140,7 @@ public function update(Request $request, $userId)
             'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+            
         if ($request->has('email') && $request->email !== $user->email) {
             $request->validate([
                 'email' => 'unique:users,email', 
