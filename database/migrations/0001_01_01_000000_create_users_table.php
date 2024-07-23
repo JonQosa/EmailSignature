@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            // $table->user_id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
-            $table->string('last_name');
+            $table->string('last_name')->default('');
             $table->string('email')->unique();
-            $table->string('title');
-            $table->string('company');
+            $table->string('title')->nullable();
+            $table->string('company')->default('');
             $table->string('meeting_link')->nullable(); 
-            $table->string('address');
+            $table->string('address')->default('');
             $table->string('website')->default('');
             $table->string('linkedin_profile')->nullable();
             $table->string('company_linkedin')->nullable();
@@ -27,7 +30,7 @@ return new class extends Migration
             $table->string('feedback')->nullable();
             $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();
-            $table->string('phone');
+            $table->string('phone')->default('');
             // $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->timestamp('email_verified_at')->nullable();

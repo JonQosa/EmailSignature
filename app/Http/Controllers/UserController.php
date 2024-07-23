@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Admin;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 use App\Models\Image;
 
 class UserController extends Controller
 {
+
     public function store(Request $request)
     {
+        // dd($request->all());
         
             $validatedDataUser = $request->validate([
                 'name' => 'required|string|max:255',
@@ -81,12 +88,20 @@ class UserController extends Controller
 }
 public function index()
 {
-   
-    $user = User::with('image')->get();
 
-    return response()->json($user);
+    $user = Auth::user();
+
+    // dd($user->is_admin);
+
+    
+    // if (!$user || !$user->is_admin) {
+    //     return response()->json(['error' => 'Unauthorized. Only admins can access this resource.'], 403);
+    // }
+
+    $users = User::with('image')->get();
+
+    return response()->json($users);
 }
-
 public function show($userId){
     try {
         // Find the user by ID
@@ -107,14 +122,119 @@ public function show($userId){
 
 }
 
+// public function update(Request $request, $userId)
+// {
+//     try {
+//         // Verify if authenticated user matches the requested user
+//         // $authenticatedUser = $request->user();
+//         // if ($authenticatedUser->id != $userId) {
+//         //     return response()->json(['error' => 'Unauthorized. You can only update your own information.'], 403);
+//         // }
+
+//         $user = User::findOrFail($userId);
+
+//         // Check if the authenticated user can update this particular user
+//         if ($user->id !== Auth::id() && !Admin::where('user_id', $user->id)->exists()) {
+//             return response()->json(['error' => 'Unauthorized. You can only update your own information.'], 403);
+//         }
+        
+     
+
+
+//         // Validate user data
+//         $validatedUserData = $request->validate([
+//             'name' => 'string|max:255',
+//             'last_name' => 'string|max:255',
+//             'title' => 'string|max:255',
+//             'company' => 'string|max:255',
+//             'meeting_link' => 'nullable|url|max:255',
+//             'address' => 'string|max:255',
+//             'website' => 'nullable|url|max:255',
+//             'linkedin_profile' => 'nullable|url',
+//             'company_linkedin' => 'nullable|url|max:255',
+//             'facebook' => 'nullable|url',
+//             'feedback' => 'nullable|string|max:255',
+//             'twitter' => 'nullable|url|max:255',
+//             'instagram' => 'nullable|url',
+//             'phone' => 'string',
+//             'email' => 'email',
+//             'description' => 'string',
+//         ]);
+
+//         // Validate image data
+//         $validatedImageData = $request->validate([
+//             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//             'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//             'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//         ]);
+
+//         if (!$request->has('email')) {
+//             unset($validatedUserData['email']);
+//         } else {
+//             $validatedUserData['email'] = $request->input('email');
+//             $request->validate([
+//                 'email' => 'email',
+//             ]);
+//         }
+
+//         $user->update($validatedUserData);
+
+//         // Find associated image record
+//         $imgUser = Image::where('user_id', $userId)->first();
+
+//         // Handle image update
+//         if ($request->hasFile('image')) {
+//             if ($imgUser && $imgUser->image) {
+//                 Storage::delete('public/' . $imgUser->image);
+//             }
+
+//             $imagePath = $request->file('image')->store('images', 'public');
+//             $imgUser->image = basename($imagePath);
+//         }
+
+//         // Update other image fields if files are provided
+//         $fields = ['company_logo', 'company_logo1', 'company_logo2', 'gif'];
+//         foreach ($fields as $field) {
+//             if ($request->hasFile($field)) {
+//                 if ($imgUser && $imgUser->$field) {
+//                     Storage::delete('public/' . $imgUser->$field);
+//                 }
+
+//                 $filePath = $request->file($field)->store('images', 'public');
+//                 $imgUser->$field = basename($filePath);
+//             }
+//         }
+
+//         // Save image record
+//         if ($imgUser) {
+//             $imgUser->user_id = $user->id;
+//             $imgUser->save();
+//         }
+
+//         // Return response
+//         return response()->json([
+//             'message' => 'User updated successfully',
+//             'user' => $user->refresh(), // Ensure you fetch the latest data after update
+//             'image' => $imgUser ? asset('storage/' . $imgUser->image) : null,
+//         ]);
+
+//     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+//         return response()->json(['error' => 'User not found'], 404);
+//     } catch (\Exception $e) {
+//         return response()->json(['error' => 'Failed to update user', 'message' => $e->getMessage()], 500);
+//     }
+// }
 public function update(Request $request, $userId)
 {
-
     try {
-        
         $user = User::findOrFail($userId);
-
-        $validatedData = $request->validate([
+        if (Admin::where('id', $request->user()->id)->exists() === false && $userId !== $request->user()->id) {
+            return response()->json(['error' => 'Unauthorized. You can only update your own information or you are not an admin.'], 403);
+        }
+        // Validate user data
+        $validatedUserData = $request->validate([
             'name' => 'string|max:255',
             'last_name' => 'string|max:255',
             'title' => 'string|max:255',
@@ -132,7 +252,9 @@ public function update(Request $request, $userId)
             'email' => 'email',
             'description' => 'string',
         ]);
-        $validationDataImage = $request->validate([
+
+        // Validate image data
+        $validatedImageData = $request->validate([
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -140,54 +262,55 @@ public function update(Request $request, $userId)
             'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-            
-        if ($request->has('email') && $request->email !== $user->email) {
+        if (!$request->has('email')) {
+            unset($validatedUserData['email']);
+        } else {
+            // If email is present, validate it
+            $validatedUserData['email'] = $request->input('email');
             $request->validate([
-                'email' => 'unique:users,email', 
+                'email' => 'email',
             ]);
         }
 
-        
+        // Update user
+        $user->update($validatedUserData);
 
+        // Handle image update
         $imgUser = Image::where('user_id', $userId)->first();
 
-
         if ($request->hasFile('image')) {
-            if ($imgUser->image) {
+            if ($imgUser && $imgUser->image) {
                 Storage::delete('public/' . $imgUser->image);
             }
 
-            //  new image
             $imagePath = $request->file('image')->store('images', 'public');
             $imgUser->image = basename($imagePath);
         }
 
-        // dd($request->company_logo);
-        if ($request->hasFile('company_logo')) {
-            $companyLogoPath = $request->file('company_logo')->store('images', 'public');
-            $imgUser->company_logo = basename($companyLogoPath);
-        }
-        if ($request->hasFile('company_logo1')) {
-            $companyLogo1Path = $request->file('company_logo1')->store('images', 'public');
-            $imgUser->company_logo1 = basename($companyLogo1Path);
-        }
-        if ($request->hasFile('company_logo2')) {
-            $companyLogo2Path = $request->file('company_logo2')->store('images', 'public');
-            $imgUser->company_logo2 = basename($companyLogo2Path);
-        }
-        if ($request->hasFile('gif')) {
-            $gifPath = $request->file('gif')->store('images', 'public');
-            $imgUser->gif = basename($gifPath);
-        }
-        
-        $user = User::findOrFail($userId);
-        // dd($user);
-        $imgUser->user_id = $user->id;
-        $imgUser->save();
+        $fields = ['company_logo', 'company_logo1', 'company_logo2', 'gif'];
+        foreach ($fields as $field) {
+            if ($request->hasFile($field)) {
+                if ($imgUser && $imgUser->$field) {
+                    Storage::delete('public/' . $imgUser->$field);
+                }
 
-        $user->update($validatedData);
-        // dd($validatedData);
-    return response()->json(['message' => 'User updated successfully', 'user' => $user->refresh()]);
+                $filePath = $request->file($field)->store('images', 'public');
+                $imgUser->$field = basename($filePath);
+            }
+        }
+
+        // Save or update image record
+        if ($imgUser) {
+            $imgUser->user_id = $user->id;
+            $imgUser->save();
+        }
+
+        // Return response
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user->refresh(), // Ensure you fetch the latest data after update
+            'image' => $imgUser ? asset('storage/' . $imgUser->image) : null,
+        ]);
 
     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
         return response()->json(['error' => 'User not found'], 404);
@@ -195,12 +318,35 @@ public function update(Request $request, $userId)
         return response()->json(['error' => 'Failed to update user', 'message' => $e->getMessage()], 500);
     }
 }
-public function destroy($userId)
+
+
+
+
+
+public function destroy(Request $request, $userId)
 {
     try {
-        $user = User::findOrFail($userId);
+        // Ensure the authenticated user is the one requesting deletion
+        $user = $request->user(); // Retrieve the authenticated user
 
-        $user->delete();
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'message' => ['Unauthorized']
+            ])->status(403);
+        }
+
+        // Check if the authenticated user ID matches the $userId provided
+        if ($user->id != $userId) {
+            throw ValidationException::withMessages([
+                'message' => ['Unauthorized']
+            ])->status(403);
+        }
+
+        // Find the user to delete
+        $userToDelete = User::findOrFail($userId);
+
+        // Delete the user
+        $userToDelete->delete();
 
         return response()->json(['message' => 'User deleted successfully'], 200);
 

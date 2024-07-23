@@ -21,9 +21,7 @@ class Cors
  
          // Allow requests from all domains during development
          // Replace '*' with your actual frontend domain in production
-         $response->headers->set('Access-Control-Allow-Origin', '*');
-         $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE');
-         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, multipart/form-data');
+        
  
          return $response;
      }
