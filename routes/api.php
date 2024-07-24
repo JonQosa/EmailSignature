@@ -46,3 +46,4 @@ Route::post('/register', [UserAuthController::class, 'register']);
 Route::post('/logout', [UserAuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
+Route::put('/admin/users/{userId}/role', [AdminAuthController::class, 'changeRole'])->middleware('auth:sanctum');
