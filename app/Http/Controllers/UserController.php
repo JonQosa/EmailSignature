@@ -91,15 +91,13 @@ public function index()
 
     $user = Auth::user();
 
-    // dd($user->is_admin);
+    $userModel = User::find($user->id);
 
     
-    // if (!$user || !$user->is_admin) {
-    //     return response()->json(['error' => 'Unauthorized. Only admins can access this resource.'], 403);
-    // }
-
+    if (!$userModel || !$userModel->is_admin) {
+        return response()->json(['error' => 'Unauthorized. Only admins can access this resource.'], 403);
+    }
     $users = User::with('image')->get();
-
     return response()->json($users);
 }
 public function show($userId){

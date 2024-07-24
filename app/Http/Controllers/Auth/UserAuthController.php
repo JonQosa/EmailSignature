@@ -45,10 +45,12 @@ public function login(Request $request)
         // Authentication passed
         $user = Auth::user();
         $token = $user->createToken('Personal Access Token')->plainTextToken;
+        $role = $user->role;
 
         return response()->json([
             'message' => 'Login successful',
-            'access_token' => $token
+            'access_token' => $token,
+            'role' => $role,
         ]);
     }
 

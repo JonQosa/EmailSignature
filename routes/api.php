@@ -23,7 +23,7 @@ Route::get('users/{id}', [UserController::class, 'show'])->middleware('auth:sanc
 Route::put('save-user/{id}', [UserController::class, 'update'])->middleware('auth:sanctum');
 Route::put('/users/{userId}/update', [UserController::class, 'update'])->middleware('auth:sanctum');
 Route::post('/users/store', [UserController::class, 'store'])->middleware('auth:sanctum');
-Route::delete('users/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
+Route::delete('delete-signature/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
 
 
 
@@ -44,6 +44,5 @@ Route::middleware('auth:sanctum')->post('admin/logout', [AdminAuthController::cl
 Route::post('/login', [UserAuthController::class, 'login']);
 Route::post('/register', [UserAuthController::class, 'register']);
 Route::post('/logout', [UserAuthController::class, 'logout'])->middleware('auth:sanctum');
-
 
 
