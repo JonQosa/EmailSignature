@@ -29,7 +29,6 @@ class UserAuthController extends Controller
         'password' => bcrypt($validatedData['password']),
     ]);
 
-    // Optionally, send verification email, etc.
 
     return response()->json(['message' => 'User registered successfully'], 201);
 }
@@ -42,15 +41,17 @@ public function login(Request $request)
     ]);
 
     if (Auth::attempt($credentials)) {
-        // Authentication passed
+
         $user = Auth::user();
         $token = $user->createToken('Personal Access Token')->plainTextToken;
         $role = $user->role;
+        $id = $user->id;
 
         return response()->json([
             'message' => 'Login successful',
             'access_token' => $token,
             'role' => $role,
+            'id' => $id
         ]);
     }
 

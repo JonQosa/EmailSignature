@@ -57,7 +57,9 @@ class User extends Authenticatable
     // // Example logic to check if the user is an admin
     // return $this->role === 'admin'; // Adjust based on your actual role logic
     // }
-
+    public function Signature(){
+        return $this->hasMany(Signature::class);
+    }
 
 
     /**

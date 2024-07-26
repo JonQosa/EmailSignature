@@ -46,10 +46,13 @@ class UserController extends Controller
                 'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $user = User::create($validatedDataUser);
+            $loggedInUserId = auth()->id();
+
+            $user = User::find($loggedInUserId);
+
 
         
-            $imgUser = new Image();
+            $imgUser = User::firstOrCreate(['id'=>auth()->id()]);
 
             if ($request->hasFile('image')) {
                 // Delete old image if exists
@@ -57,8 +60,7 @@ class UserController extends Controller
                 $imagePath = $request->file('image')->store('images', 'public');
                 $imgUser->image = basename($imagePath);
             }
-
-            if ($request->hasFile('company_logo')) {
+         if ($request->hasFile('company_logo')) {
                 $companyLogoPath = $request->file('company_logo')->store('images', 'public');
                 $imgUser->company_logo = basename($companyLogoPath);
             }
@@ -75,7 +77,6 @@ class UserController extends Controller
                 $imgUser->gif = basename($gifPath);
             }
 
-            $imgUser->user_id = $user->id;
             $imgUser->save();
             $user->save();
             // updated
@@ -261,13 +262,13 @@ public function update(Request $request, $userId)
         ]);
 
         if (!$request->has('email')) {
-            unset($validatedUserData['email']);
-        } else {
-            // If email is present, validate it
-            $validatedUserData['email'] = $request->input('email');
             $request->validate([
                 'email' => 'email',
             ]);
+            $validatedUserData['email'] =  $request->input('email');
+        } else {
+            unset($validatedUserData['email']);
+            // If email is present, validate it
         }
 
         // Update user

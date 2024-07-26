@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\SignatureController;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -24,6 +26,14 @@ Route::put('save-user/{id}', [UserController::class, 'update'])->middleware('aut
 Route::put('/users/{userId}/update', [UserController::class, 'update'])->middleware('auth:sanctum');
 Route::post('/users/store', [UserController::class, 'store'])->middleware('auth:sanctum');
 Route::delete('delete-signature/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
+
+
+
+
+
+Route::post('/signature/store', [SignatureController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/signature/{id}', [SignatureController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/signature/{id}', [SignatureController::class, 'destroy'])->middleware('auth:sanctum');
 
 
 
