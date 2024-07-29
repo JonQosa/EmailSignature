@@ -140,6 +140,40 @@ public function index()
         return response()->json(['error' => 'Failed to retrieve signatures', 'message' => $e->getMessage()], 500);
     }
 }
+public function show($id)
+{
+    try {
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        $isAdmin = $user->is_admin;
+
+        if (!$isAdmin && $user->id != $id) {
+            return response()->json(['message' => 'Unauthorized to view this signature.'], 403);
+        }
+
+        $signature = Signature::where('user_id', $id)->first();
+
+        if (!$signature) {
+            return response()->json(['message' => 'Signature not found.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Signature retrieved successfully.',
+            'signature' => $signature
+        ], 200);
+
+    } catch (\Exception $e) {
+        // Log the exception message and return an error response
+        Log::error('Failed to retrieve signature', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Failed to retrieve signature', 'message' => $e->getMessage()], 500);
+    }
+}
+
 
 
     

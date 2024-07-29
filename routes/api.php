@@ -30,7 +30,7 @@ Route::delete('delete-signature/{id}', [UserController::class, 'destroy'])->midd
 
 
 
-
+Route::get('signatures/{id}', [SignatureController::class, 'show'])->middleware('auth:sanctum');
 Route::get('get-signatures', [SignatureController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/signature/store', [SignatureController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/signature/{id}', [SignatureController::class, 'update'])->middleware('auth:sanctum');
