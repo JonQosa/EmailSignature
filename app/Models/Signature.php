@@ -30,9 +30,14 @@ class Signature extends Model
         'description',
         'password',
     ];
-
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'user_id', 'user_id');
     }
 
 }

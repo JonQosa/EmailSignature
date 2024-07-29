@@ -18,8 +18,14 @@ class Image extends Model
     'company_logo2',
     'gif',
     ];
-
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
+
+    public function signature()
+    {
+        return $this->hasOne(Signature::class, 'user_id', 'user_id');
+    }
+
 }

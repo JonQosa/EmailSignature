@@ -31,6 +31,7 @@ Route::delete('delete-signature/{id}', [UserController::class, 'destroy'])->midd
 
 
 
+Route::get('get-signatures', [SignatureController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/signature/store', [SignatureController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/signature/{id}', [SignatureController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/signature/{id}', [SignatureController::class, 'destroy'])->middleware('auth:sanctum');
@@ -42,6 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{userId}/images', [ImageController::class, 'update']);
     Route::delete('/users/{userId}/images', [ImageController::class, 'destroy']);
 });
+
+
+Route::put('/signature/{id}/image', [ImageController::class, 'update'])->middleware('auth:sanctum');
+
 
 
 // Admin routes

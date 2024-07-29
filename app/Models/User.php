@@ -49,7 +49,8 @@ class User extends Authenticatable
         'description',
         'password',
     ];
-    public function image(){
+    public function images()
+    {
         return $this->hasMany(Image::class);
     }
     // public function isAdmin()
@@ -57,10 +58,10 @@ class User extends Authenticatable
     // // Example logic to check if the user is an admin
     // return $this->role === 'admin'; // Adjust based on your actual role logic
     // }
-    public function Signature(){
-        return $this->hasMany(Signature::class);
+    public function signature()
+    {
+        return $this->hasOne(Signature::class);
     }
-
 
     /**
      * The attributes that should be hidden for serialization.
