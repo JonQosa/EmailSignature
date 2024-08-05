@@ -226,6 +226,24 @@ public function getSignatures($userId)
 
         return response()->json(['signatures' => $signatures]);
     }
+    // public function show($userId)
+    // {
+    //     // Retrieve the signature for the given user ID
+    //     $signature = Signature::where('userId', $userId)->first();
+
+    //     if ($signature) {
+    //         return response()->json([
+    //             'signature' => [
+    //                 'id' => $signature->id,
+    //                 'name' => $signature->name,
+    //                 'last_name' => $signature->last_name,
+    //                 'html_content' => $signature->html_content, // Adjust this if the field name is different
+    //             ]
+    //         ]);
+    //     }
+
+    //     return response()->json(['error' => 'Signature not found.'], 404);
+    // }
 
     public function show(Request $request, $id)
     {
@@ -250,7 +268,8 @@ public function getSignatures($userId)
             }
 
             $image = Image::where(['user_id' => $user->id]);
-            $image = Image::where('user_id', $id)->get();
+            // added
+            $image = Image::where('user_id', $id)->get(); 
 
 
             return response()->json([

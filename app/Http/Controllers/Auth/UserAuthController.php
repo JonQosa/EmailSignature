@@ -80,21 +80,16 @@ public function logout(Request $request)
 
     return response()->json(['message' => 'Logout successful']);
 }
-public function destroyByUserId(){
+
+public function deleteUserById($user_id)
+{
     try {
-        $signatures = Signature::where('user_id', $user_id)->get();
-        if ($signatures->isEmpty()) {
-            \Log::info('No signatures found for user_id:', ['user_id' => $user_id]);
-            return response()->json(['message' => 'No signatures found for the user'], 404);
-        }
-        foreach ($signatures as $signature) {
-            $signature->delete();
-        }
-        \Log::info('Signatures deleted for user_id:', ['user_id' => $user_id]);
-        return response()->json(['message' => 'Signatures deleted successfully'], 200);
+        $user = User::findOrFail($user_id);
+        $user->delete();
+        return response()->json(null, 204);
     } catch (\Exception $e) {
-        \Log::error('Failed to delete signatures for user_id:', ['user_id' => $user_id, 'error' => $e->getMessage()]);
-        return response()->json(['message' => 'Failed to delete signatures', 'error' => $e->getMessage()], 500);
+        Log::error('Error deleting user: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
     }
 }
 }

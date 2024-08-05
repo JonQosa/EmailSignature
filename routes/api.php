@@ -44,6 +44,10 @@ Route::delete('/signature/{id}', [SignatureController::class, 'destroy'])->middl
 Route::get('/user-images/{userId}', [ImageController::class, 'getImage'])->middleware('auth:sanctum');
 
 
+// Route::get('/link-signatures/{userId}', [SignatureController::class, 'show'])
+//     ->middleware('auth:api');
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/{userId}/images', [ImageController::class, 'store']);
     Route::put('/users/{userId}/images', [ImageController::class, 'update']);

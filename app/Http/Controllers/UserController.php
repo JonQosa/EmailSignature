@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Signature;
 use App\Models\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -107,9 +108,11 @@ public function show($userId){
         $user = User::findOrFail($userId);
 
         $imgUser = Image::where('user_id', $userId)->get();
+        $signature = Signature::where('user_id', $userId)->first();
 
         return response()->json([
-            'user' => $user,
+            // 'user' => $user,
+            'signature' => $signature,
             'image' => $imgUser,
         ]);
 
