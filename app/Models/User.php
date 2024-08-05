@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Signature;
 
 
 class User extends Authenticatable
@@ -49,18 +50,26 @@ class User extends Authenticatable
         'description',
         'password',
     ];
-    public function images()
-    {
-        return $this->hasMany(Image::class);
-    }
+    // public function images()
+    // {
+    //     return $this->hasOne(Image::class, 'user_id', 'id');
+    // }
     // public function isAdmin()
     // {
     // // Example logic to check if the user is an admin
     // return $this->role === 'admin'; // Adjust based on your actual role logic
     // }
-    public function signature()
+    public function signatures()
     {
-        return $this->hasOne(Signature::class);
+        return $this->hasMany(Signature::class, 'user_id');
+    }
+
+    public function images(){
+        return $this-hasMany(Image::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     /**

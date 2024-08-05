@@ -30,14 +30,28 @@ class Signature extends Model
         'description',
         'password',
     ];
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    // public function image()
+    // {
+    //     return $this->hasOne(Image::class, 'user_id', 'user_id');
+    // }
+
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
     public function user()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function image()
-    {
-        return $this->hasOne(Image::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }

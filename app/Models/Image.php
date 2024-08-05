@@ -23,9 +23,9 @@ class Image extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function signature()
-    {
-        return $this->hasOne(Signature::class, 'user_id', 'user_id');
-    }
+    // public function signature()
+    // {
+    //     return $this->hasOne(Signature::class, 'user_id', 'user_id');
+    // }
 
 }

@@ -29,13 +29,19 @@ Route::delete('delete-signature/{id}', [UserController::class, 'destroy'])->midd
 
 
 
+Route::get('signatures/{id}', [SignatureController::class, 'getSignatures'])->middleware('auth:sanctum');
+Route::get('get-users', [UserAuthController::class, 'getAllUsers'])->middleware('auth:sanctum');
+Route::delete('delete-user/{user_id}', [UserAuthController::class, 'deleteUserById'])->middleware('auth:sanctum');
+
 
 Route::get('signatures/{id}', [SignatureController::class, 'show'])->middleware('auth:sanctum');
 Route::get('get-signatures', [SignatureController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/signature/store', [SignatureController::class, 'store'])->middleware('auth:sanctum');
-Route::put('/signature/{id}', [SignatureController::class, 'update'])->middleware('auth:sanctum');
+Route::put('/signature/{userId}', [SignatureController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/signature/{id}', [SignatureController::class, 'destroy'])->middleware('auth:sanctum');
 
+
+Route::get('/user-images/{userId}', [ImageController::class, 'getImage'])->middleware('auth:sanctum');
 
 
 Route::middleware('auth:sanctum')->group(function () {

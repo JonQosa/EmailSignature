@@ -10,7 +10,8 @@ class CreateSignaturesTable extends Migration
     {
         Schema::create('signatures', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            // $table->string('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name')->default('');
             $table->string('last_name')->default('');
             $table->string('email')->default('');
@@ -32,6 +33,10 @@ class CreateSignaturesTable extends Migration
             $table->string('password')->default('');
             $table->rememberToken();
             $table->timestamps();
+
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

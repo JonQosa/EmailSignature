@@ -33,6 +33,15 @@ class UserAuthController extends Controller
     return response()->json(['message' => 'User registered successfully'], 201);
 }
 
+public function getAllUsers()
+{
+    // Fetch all users
+    $users = User::all();
+
+    // Return response
+    return response()->json(['users' => $users]);
+}
+
 public function login(Request $request)
 {
     $credentials = $request->validate([
@@ -41,8 +50,9 @@ public function login(Request $request)
     ]);
 
     if (Auth::attempt($credentials)) {
+        
+        $user = User::where('email',$request->email)->first();
 
-        $user = Auth::user();
         $token = $user->createToken('Personal Access Token')->plainTextToken;
         $role = $user->role;
         $id = $user->id;
@@ -69,5 +79,22 @@ public function logout(Request $request)
     }
 
     return response()->json(['message' => 'Logout successful']);
+}
+public function destroyByUserId(){
+    try {
+        $signatures = Signature::where('user_id', $user_id)->get();
+        if ($signatures->isEmpty()) {
+            \Log::info('No signatures found for user_id:', ['user_id' => $user_id]);
+            return response()->json(['message' => 'No signatures found for the user'], 404);
+        }
+        foreach ($signatures as $signature) {
+            $signature->delete();
+        }
+        \Log::info('Signatures deleted for user_id:', ['user_id' => $user_id]);
+        return response()->json(['message' => 'Signatures deleted successfully'], 200);
+    } catch (\Exception $e) {
+        \Log::error('Failed to delete signatures for user_id:', ['user_id' => $user_id, 'error' => $e->getMessage()]);
+        return response()->json(['message' => 'Failed to delete signatures', 'error' => $e->getMessage()], 500);
+    }
 }
 }
