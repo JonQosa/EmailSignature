@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Signature extends Model
 {
@@ -26,6 +27,8 @@ class Signature extends Model
         'twitter',
         'instagram',
         'phone',
+        'gif',
+        'html_content',
         'role',
         'description',
         'password',
@@ -45,13 +48,23 @@ class Signature extends Model
     //     return $this->belongsTo(User::class);
     // }
 
+
+// ssss
     public function images()
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Image::class, 'user_id', 'user_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // public function signatures()
+    // {
+    //     return $this->hasMany(User::class, 'user_id');
+    // }
+
+
 
 }

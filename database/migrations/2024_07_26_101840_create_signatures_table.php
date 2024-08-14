@@ -24,6 +24,7 @@ class CreateSignaturesTable extends Migration
             $table->string('company_linkedin')->nullable();
             $table->string('facebook')->nullable();
             $table->string('feedback')->nullable();
+            $table->string('gif')->nullable();
             $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();
             $table->string('phone')->default('');

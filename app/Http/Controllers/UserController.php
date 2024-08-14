@@ -44,7 +44,7 @@ class UserController extends Controller
                 'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'gif' => 'nullable|url',
             ]);
 
             $loggedInUserId = auth()->id();
@@ -73,10 +73,10 @@ class UserController extends Controller
                 $companyLogo2Path = $request->file('company_logo2')->store('images', 'public');
                 $imgUser->company_logo2 = basename($companyLogo2Path);
             }
-            if ($request->hasFile('gif')) {
-                $gifPath = $request->file('gif')->store('images', 'public');
-                $imgUser->gif = basename($gifPath);
-            }
+            // if ($request->hasFile('gif')) {
+            //     $gifPath = $request->file('gif')->store('images', 'public');
+            //     $imgUser->gif = basename($gifPath);
+            // }
 
             $imgUser->save();
             $user->save();
@@ -157,7 +157,7 @@ public function update(Request $request, $userId)
             'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_logo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gif' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gif' => 'nullable|url',
         ]);
 
         if (!$request->has('email')) {
@@ -185,7 +185,7 @@ public function update(Request $request, $userId)
             $imgUser->image = basename($imagePath);
         }
 
-        $fields = ['company_logo', 'company_logo1', 'company_logo2', 'gif'];
+        $fields = ['company_logo', 'company_logo1', 'company_logo2'];
         foreach ($fields as $field) {
             if ($request->hasFile($field)) {
                 if ($imgUser && $imgUser->$field) {

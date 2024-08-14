@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('company_logo')->nullable();
             $table->string('company_logo1')->nullable();
             $table->string('company_logo2')->nullable();
-            $table->string('gif')->nullable();
+            // $table->string('gif')->nullable();
             $table->timestamps();
         });
     }
