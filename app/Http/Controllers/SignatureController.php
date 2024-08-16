@@ -17,25 +17,20 @@ class SignatureController extends Controller
 
     public function getUserSignatures($id)
     {
-        // Ensure the user is authenticated
         $user = Auth::user();
     
-        // Check if the authenticated user is trying to access their own signatures
         if ($user->id !== (int) $id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     
-        // Retrieve all signatures created by the user
         $signatures = Signature::where('user_id', $id)->get();
     
-        // Return the signatures in the response
         return response()->json(['signatures' => $signatures]);
     }
     
 
    public function store(Request $request)
     {
-        // Validate user data
         $validatedDataUser = $request->validate([
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
