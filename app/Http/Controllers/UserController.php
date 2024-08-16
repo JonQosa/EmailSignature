@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+// dd($request->all());
         
             $validatedDataUser = $request->validate([
                 'name' => 'required|string|max:255',
@@ -39,6 +39,7 @@ class UserController extends Controller
                 'description' => 'required|string'
             ]);
 
+
             $validationDataImage = $request->validate([
                 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -56,8 +57,7 @@ class UserController extends Controller
             $imgUser = User::firstOrCreate(['id'=>auth()->id()]);
 
             if ($request->hasFile('image')) {
-                // Delete old image if exists
-
+// Deleting old images if they exist somewhere
                 $imagePath = $request->file('image')->store('images', 'public');
                 $imgUser->image = basename($imagePath);
             }
@@ -73,6 +73,8 @@ class UserController extends Controller
                 $companyLogo2Path = $request->file('company_logo2')->store('images', 'public');
                 $imgUser->company_logo2 = basename($companyLogo2Path);
             }
+
+        //removed the gif 
             // if ($request->hasFile('gif')) {
             //     $gifPath = $request->file('gif')->store('images', 'public');
             //     $imgUser->gif = basename($gifPath);
