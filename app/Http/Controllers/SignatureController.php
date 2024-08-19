@@ -108,16 +108,18 @@ class SignatureController extends Controller
         foreach (['image', 'company_logo', 'company_logo1', 'company_logo2'] as $field) {
             if ($request->hasFile($field)) {
                 $path = $request->file($field)->store('images', 'public');
-                $imagePaths[$field] = $path;
+                $imagePaths[$field] = basename($path);
             } else {
                 $imagePaths[$field] = null;
             }
         }
 
-        $image = Image::updateOrCreate(
-            ['user_id' => $user->id],
-            $imagePaths
-        );
+        // $image = Image::updateOrCreate(
+        //     ['user_id' => $user->id],
+        //     $imagePaths
+        // );
+        $image = Image::create(array_merge(['user_id' => $user->id], $imagePaths));
+
 
         // Log success message
         Log::info('Signature saved successfully.', ['user_id' => $user->id, 'signature_id' => $signature->id, 'image_id' => $image->id]);
@@ -328,7 +330,7 @@ public function signaturesShow(Request $request){
             'facebook' => 'nullable|url',
             'twitter' => 'nullable|url',
             'instagram' => 'nullable|url',
-            'phone' => 'required|string',
+            'phone' => 'required|min:11|numeric',
             'email' => 'required|email',
             'gif' => 'nullable|url',
             'description' => 'required|string',
